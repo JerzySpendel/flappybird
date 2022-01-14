@@ -8,12 +8,15 @@ mod vertex;
 mod transformations;
 mod texture;
 mod score;
+mod state;
 
+use std::time::Duration;
 use crate::pipe_system::PipeSystem;
 use crate::traits::Drawable;
 use glium;
 use glium::{Display, Frame, glutin, Program};
 use glium::Surface;
+use crate::state::{GameOverLayer, GameState};
 use crate::texture::Texture;
 
 fn main() {
@@ -30,6 +33,7 @@ fn main() {
         None,
     )
     .unwrap();
+    let mut game_over_layer = GameOverLayer::new(GameState::Rolling, &display);
 
     let mut background =
         background::Background::new("./assets/sprites/background-day.png", 1.4, &display, 0.05);
@@ -65,14 +69,19 @@ fn main() {
         }
 
         let now = std::time::Instant::now();
-        let dt = (now - last_time);
+        let mut dt = (now - last_time);
         last_time = now;
+
+        if game_over_layer.game_ended() {
+            dt = Duration::from_secs(0); // Stop the time if the game has ended
+        }
 
         let mut layers: Vec<&mut dyn Drawable> = vec![
             &mut background,
             &mut pipe_system,
             &mut base,
             &mut bird,
+            &mut game_over_layer,
         ];
 
         let mut frame = display.draw();
@@ -86,7 +95,7 @@ fn main() {
 
         frame.finish().unwrap();
         if pipe_system.check_collision(&bird) {
-            println!("Kolizja! {:?}", &now);
+            game_over_layer.set_end();
         }
         pipe_system.check_points(&bird);
 

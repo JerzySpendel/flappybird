@@ -35,6 +35,13 @@ impl Rect {
     pub fn width(&self) -> f32 {
         self.br.0 - self.tl.0
     }
+
+    pub fn from_center(center: (f32, f32), width: f32, height: f32) -> Rect {
+        Rect {
+            tl: (center.0 - width / 2., center.1 + height / 2.),
+            br: (center.1 - height / 2., center.1 - height / 2.),
+        }
+    }
 }
 
 pub struct PositionConsumer {
@@ -114,9 +121,9 @@ mod position_consumer_test {
     fn feed_works() {
         let mut pc = PositionConsumer::new();
 
-        assert_eq!(pc.feed(2), false);
-        assert_eq!(pc.feed(1), false);
-        assert_eq!(pc.feed(1), false);
+        assert_eq!(pc.feed(2f32), false);
+        assert_eq!(pc.feed(1f32), false);
+        assert_eq!(pc.feed(1f32), false);
 
     }
 }

@@ -86,6 +86,15 @@ impl Texture {
         ]);
     }
 
+    pub fn set_pos_center(&mut self, pos: (f32, f32)) {
+        let height = self.get_height();
+        let width = self.get_width();
+
+        self.set_pos(
+            (pos.0 - width / 2., pos.1 + height / 2.)
+        )
+    }
+
     pub fn get_height(&self) -> f32 {
         (self.orig_size.1 as f32) / (self.orig_size.0 as f32) * self.width
     }
