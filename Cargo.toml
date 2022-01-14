@@ -11,8 +11,3 @@ image = "0.23.14"
 nalgebra = "0.29.0"
 rand = "0.8.4"
 arrayvec = "0.7.2"
-
-
-[dependencies.amethyst]
-version = "0.15.3"
-features = ["vulkan"]
