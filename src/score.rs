@@ -39,8 +39,8 @@ impl Score {
     }
 }
 
-impl<'b, 'c> Drawable<'b, 'c> for Score {
-    fn draw(&self, frame: Frame, facade: &'b dyn Facade, program: &'c Program) -> Frame {
+impl Drawable for Score {
+    fn draw(&self, frame: Frame, facade: &dyn Facade, program: &Program) -> Frame {
         let digits = self.score.to_string().chars().map(|char|{
             char.to_digit(10).unwrap().try_into().unwrap()
         }).collect::<Vec<u16>>();

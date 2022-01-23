@@ -47,8 +47,8 @@ impl Pipe {
     }
 }
 
-impl<'b, 'c> Drawable<'b, 'c> for Pipe {
-    fn draw(&self, mut frame: Frame, facade: &'b dyn Facade, program: &'c Program) -> Frame {
+impl Drawable for Pipe {
+    fn draw(&self, mut frame: Frame, facade: &dyn Facade, program: &Program) -> Frame {
         let mut texture = self.texture.borrow_mut();
         let texture_height = texture.get_height();
         texture.rotation = Some(std::f32::consts::PI);
@@ -173,8 +173,8 @@ impl PipeSystem {
     }
 }
 
-impl<'b, 'c> Drawable<'b, 'c> for PipeSystem {
-    fn draw(&self, mut frame: Frame, facade: &'b dyn Facade, program: &'c Program) -> Frame {
+impl Drawable for PipeSystem {
+    fn draw(&self, mut frame: Frame, facade: &dyn Facade, program: &Program) -> Frame {
         for pipe in &self.pipes {
             frame = pipe.draw(frame, facade, program);
         }

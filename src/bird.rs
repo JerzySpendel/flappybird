@@ -56,12 +56,12 @@ impl Bird {
 
 }
 
-impl<'b, 'c> Drawable<'b, 'c> for Bird {
+impl Drawable for Bird {
     fn draw(
         &self,
         mut frame: Frame,
-        facade: &'b dyn Facade,
-        program: &'c Program,
+        facade: &dyn Facade,
+        program: &Program,
     ) -> Frame {
         let mut texture = self.current_texture();
         texture.set_rotation(self.get_rotation());

@@ -36,8 +36,8 @@ impl GameOverLayer {
     }
 }
 
-impl<'b, 'c> Drawable<'b, 'c> for GameOverLayer{
-    fn draw(&self, mut frame: Frame, facade: &'b dyn Facade, program: &'c Program) -> Frame {
+impl Drawable for GameOverLayer{
+    fn draw(&self, mut frame: Frame, facade: &dyn Facade, program: &Program) -> Frame {
         if self.game_ended() {
             let texture = self.texture.borrow();
             frame = texture.draw(frame, facade, program);

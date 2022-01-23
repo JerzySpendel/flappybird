@@ -28,12 +28,12 @@ impl Background {
         }
     }
 }
-impl<'b, 'c> Drawable<'b, 'c> for Background {
+impl Drawable for Background {
     fn draw(
         &self,
         mut frame: Frame,
-        facade: &'b dyn Facade,
-        program: &'c Program,
+        facade: &dyn Facade,
+        program: &Program,
     ) -> Frame {
         let blocks_number = (2. / self.block_width).ceil() as i32 + 1;
 

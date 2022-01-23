@@ -111,8 +111,8 @@ impl Texture {
     }
 }
 
-impl<'b, 'c> Drawable<'b, 'c> for Texture {
-    fn draw(&self, mut frame: Frame, facade: &'b dyn Facade, program: &'c Program) -> Frame {
+impl Drawable for Texture {
+    fn draw(&self, mut frame: Frame, facade: &dyn Facade, program: &Program) -> Frame {
 
         let vertices_buffer = Point::standard_rectangle_buffer(facade);
         let uvs_buffer = UVPoint::standard_rectangle_buffer(facade);
