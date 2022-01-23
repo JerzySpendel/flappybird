@@ -146,8 +146,7 @@ impl<'b, 'c> Drawable<'b, 'c> for Texture {
         frame
     }
 
-    fn update(&mut self, dt: Duration) {
-    }
+    fn update(&mut self, dt: Duration) {}
 }
 
 pub fn load_texture(

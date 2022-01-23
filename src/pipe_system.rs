@@ -159,11 +159,10 @@ impl PipeSystem {
 
     }
 
-    pub fn check_collision(&self, bird: &Bird) -> bool {
-        let bird_rect = bird.get_rect();
+    pub fn check_collision(&self, bird: &Rect) -> bool {
         for pipe in &self.pipes {
             for rect in pipe.get_rects() {
-                if rect.collides(&bird_rect) {
+                if rect.collides(bird) {
                     return true
                 }
             }

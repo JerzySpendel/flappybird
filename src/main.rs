@@ -18,6 +18,7 @@ use glium::{Display, Frame, glutin, Program};
 use glium::Surface;
 use crate::state::{GameOverLayer, GameState};
 use crate::texture::Texture;
+use crate::utils::Rect;
 
 fn main() {
     let mut events_loop = glium::glutin::event_loop::EventLoop::new();
@@ -76,7 +77,7 @@ fn main() {
             dt = Duration::from_secs(0); // Stop the time if the game has ended
         }
 
-        let mut layers: Vec<&mut dyn Drawable> = vec![
+        let mut layers: &mut [&mut dyn Drawable] = &mut [
             &mut background,
             &mut pipe_system,
             &mut base,
@@ -88,15 +89,22 @@ fn main() {
         frame.clear_color(1., 0., 0., 1.);
 
 
-        for layer in &mut layers {
+        for layer in layers.iter_mut() {
             frame = layer.draw(frame,&display, &program);
             layer.update(dt);
         }
 
         frame.finish().unwrap();
-        if pipe_system.check_collision(&bird) {
+
+        let hittable: &[&dyn Fn(&Rect) -> bool] = &[
+            &|r: &Rect| { r.tl.1 >= 1. || r.br.1 <= -1. },
+            &|r: &Rect| { pipe_system.check_collision(r)},
+        ];
+
+        if hittable.iter().any(|hittable| hittable(&bird.get_rect())) {
             game_over_layer.set_end();
         }
+
         pipe_system.check_points(&bird);
 
         *control_flow = glutin::event_loop::ControlFlow::WaitUntil(

@@ -1,5 +1,6 @@
 use glium::backend::Facade;
 use glium::{Frame, Program};
+use crate::utils::Rect;
 
 pub trait Drawable<'b, 'c> {
     fn draw(
