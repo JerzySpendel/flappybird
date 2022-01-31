@@ -4,6 +4,7 @@ use crate::traits::Drawable;
 use glium::backend::Facade;
 use glium::{uniform, BlendingFunction, DrawParameters, Frame, Program, Surface};
 use nalgebra::{Matrix, Matrix2, OMatrix, Rotation2};
+use crate::GameState;
 use crate::texture::Texture;
 use crate::pipe_system::Pipe;
 use crate::utils::Rect;
@@ -62,11 +63,12 @@ impl Drawable for Bird {
         mut frame: Frame,
         facade: &dyn Facade,
         program: &Program,
+        state: &GameState,
     ) -> Frame {
         let mut texture = self.current_texture();
         texture.set_rotation(self.get_rotation());
         texture.set_pos((0., self.y_position));
-        frame = texture.draw(frame, facade, program);
+        frame = texture.draw(frame, facade, program, state);
         frame
     }
 

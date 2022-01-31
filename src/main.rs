@@ -9,6 +9,8 @@ mod transformations;
 mod texture;
 mod score;
 mod state;
+mod message;
+mod over;
 
 use std::time::Duration;
 use crate::pipe_system::PipeSystem;
@@ -16,7 +18,9 @@ use crate::traits::Drawable;
 use glium;
 use glium::{Display, Frame, glutin, Program};
 use glium::Surface;
-use crate::state::{GameOverLayer, GameState};
+use over::GameOverLayer;
+use crate::message::Message;
+use crate::state::GameState;
 use crate::texture::Texture;
 use crate::utils::Rect;
 
@@ -34,7 +38,9 @@ fn main() {
         None,
     )
     .unwrap();
-    let mut game_over_layer = GameOverLayer::new(GameState::Rolling, &display);
+    let mut state = GameState::Rolling;
+    let mut game_over_layer = GameOverLayer::new(&display);
+    let mut message_layer = message::Message::new(&display);
 
     let mut background =
         background::Background::new("./assets/sprites/background-day.png", 1.4, &display, 0.05);
@@ -73,8 +79,11 @@ fn main() {
         let mut dt = (now - last_time);
         last_time = now;
 
-        if game_over_layer.game_ended() {
-            dt = Duration::from_secs(0); // Stop the time if the game has ended
+        match state {
+            GameState::Over => {
+                dt = Duration::from_secs(0); // Stop the time if the game has ended
+            }
+            _ => {}
         }
 
         let mut layers: &mut [&mut dyn Drawable] = &mut [
@@ -90,7 +99,7 @@ fn main() {
 
 
         for layer in layers.iter_mut() {
-            frame = layer.draw(frame,&display, &program);
+            frame = layer.draw(frame,&display, &program, &state);
             layer.update(dt);
         }
 
@@ -102,7 +111,7 @@ fn main() {
         ];
 
         if hittable.iter().any(|hittable| hittable(&bird.get_rect())) {
-            game_over_layer.set_end();
+            state = GameState::Over;
         }
 
         pipe_system.check_points(&bird);

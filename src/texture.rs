@@ -6,6 +6,7 @@ use glium::draw_parameters::DrawParameters;
 use glium::{Frame, Program, Surface};
 use glium::texture::MipmapsOption;
 use glium::uniforms::{MagnifySamplerFilter, MinifySamplerFilter};
+use crate::GameState;
 use crate::traits::Drawable;
 use crate::transformations::Transformation;
 use crate::utils::Rect;
@@ -112,7 +113,7 @@ impl Texture {
 }
 
 impl Drawable for Texture {
-    fn draw(&self, mut frame: Frame, facade: &dyn Facade, program: &Program) -> Frame {
+    fn draw(&self, mut frame: Frame, facade: &dyn Facade, program: &Program, state: &GameState) -> Frame {
 
         let vertices_buffer = Point::standard_rectangle_buffer(facade);
         let uvs_buffer = UVPoint::standard_rectangle_buffer(facade);

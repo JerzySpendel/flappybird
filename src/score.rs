@@ -4,7 +4,7 @@ use std::time::Duration;
 use arrayvec::ArrayVec;
 use glium::backend::Facade;
 use glium::{Frame, Program};
-use crate::{Drawable, Texture};
+use crate::{Drawable, GameState, Texture};
 use crate::utils::Rect;
 
 pub struct Score {
@@ -40,7 +40,7 @@ impl Score {
 }
 
 impl Drawable for Score {
-    fn draw(&self, frame: Frame, facade: &dyn Facade, program: &Program) -> Frame {
+    fn draw(&self, frame: Frame, facade: &dyn Facade, program: &Program, state: &GameState) -> Frame {
         let digits = self.score.to_string().chars().map(|char|{
             char.to_digit(10).unwrap().try_into().unwrap()
         }).collect::<Vec<u16>>();
@@ -49,7 +49,7 @@ impl Drawable for Score {
         for (index, digit) in digits.iter().rev().enumerate() {
             let mut texture = self.numbers.get(usize::try_from(*digit).unwrap()).unwrap().borrow_mut();
             texture.set_pos((1f32 - (index + 1) as f32 * self.number_rect.width(), 1f32));
-            frame = texture.draw(frame, facade, program);
+            frame = texture.draw(frame, facade, program, state);
         }
         frame
     }

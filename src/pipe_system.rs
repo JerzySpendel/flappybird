@@ -1,4 +1,4 @@
-use crate::{Drawable};
+use crate::{Drawable, GameState};
 use crate::texture::Texture;
 use rand::prelude::*;
 use glium::backend::Facade;
@@ -48,16 +48,16 @@ impl Pipe {
 }
 
 impl Drawable for Pipe {
-    fn draw(&self, mut frame: Frame, facade: &dyn Facade, program: &Program) -> Frame {
+    fn draw(&self, mut frame: Frame, facade: &dyn Facade, program: &Program, state: &GameState) -> Frame {
         let mut texture = self.texture.borrow_mut();
         let texture_height = texture.get_height();
         texture.rotation = Some(std::f32::consts::PI);
         texture.set_pos((self.gap_x, self.gap_y + self.gap / 2f32 + texture_height));
-        frame = texture.draw(frame, facade, program);
+        frame = texture.draw(frame, facade, program, state);
 
         texture.rotation = Some(0.);
         texture.set_pos((self.gap_x, self.gap_y - self.gap / 2f32));
-        frame = texture.draw(frame, facade, program);
+        frame = texture.draw(frame, facade, program, state);
         frame
     }
 
@@ -174,11 +174,11 @@ impl PipeSystem {
 }
 
 impl Drawable for PipeSystem {
-    fn draw(&self, mut frame: Frame, facade: &dyn Facade, program: &Program) -> Frame {
+    fn draw(&self, mut frame: Frame, facade: &dyn Facade, program: &Program, state: &GameState) -> Frame {
         for pipe in &self.pipes {
-            frame = pipe.draw(frame, facade, program);
+            frame = pipe.draw(frame, facade, program, state);
         }
-        frame = self.score_system.draw(frame, facade, program);
+        frame = self.score_system.draw(frame, facade, program, state);
 
         frame
     }

@@ -2,7 +2,7 @@ use std::cell::RefCell;
 use glium::backend::Facade;
 use glium::{Frame, Program};
 use std::time::Duration;
-use crate::{Drawable, Texture};
+use crate::{Drawable, GameState, Texture};
 
 pub struct Background {
     block_width: f32,
@@ -34,6 +34,7 @@ impl Drawable for Background {
         mut frame: Frame,
         facade: &dyn Facade,
         program: &Program,
+        state: &GameState,
     ) -> Frame {
         let blocks_number = (2. / self.block_width).ceil() as i32 + 1;
 
@@ -46,7 +47,7 @@ impl Drawable for Background {
             let current_offset = -1. + self.block_width * (i as f32) + (self.offset % self.block_width);
 
             texture.set_pos((current_offset, -1. + height));
-            frame = texture.draw(frame, facade, program);
+            frame = texture.draw(frame, facade, program, state);
         }
 
         frame
