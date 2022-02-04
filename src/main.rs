@@ -79,13 +79,6 @@ fn main() {
         let mut dt = (now - last_time);
         last_time = now;
 
-        // match state {
-        //     GameState::Over | GameState::Message => {
-        //         dt = Duration::from_secs(0); // Stop the time if the game has ended
-        //     }
-        //     _ => {}
-        // }
-
         let mut layers: &mut [&mut dyn Drawable] = &mut [
             &mut background,
             &mut pipe_system,

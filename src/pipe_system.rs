@@ -92,7 +92,7 @@ impl PipeSystem {
 
     pub fn init(&mut self) {
         let mut pipes = &mut self.pipes;
-        pipes.push(Pipe::new(&self.texture, 0.5, 0., 0f32));
+        pipes.push(Pipe::new(&self.texture, 0.5, 0., 1f32));
     }
 
     fn last_pipe(&self) -> Option<&Pipe> {
