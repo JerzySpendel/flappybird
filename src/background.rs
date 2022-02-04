@@ -54,7 +54,12 @@ impl Drawable for Background {
 
     }
 
-    fn update(&mut self, dt: Duration) {
-        self.offset -= dt.as_secs_f32() * self.speed;
+    fn update(&mut self, dt: std::time::Duration, state: &mut GameState) {
+        match state {
+            GameState::Rolling => {
+                self.offset -= dt.as_secs_f32() * self.speed;
+            }
+            _ => {}
+        }
     }
 }

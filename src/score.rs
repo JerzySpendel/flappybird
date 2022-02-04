@@ -40,7 +40,7 @@ impl Score {
 }
 
 impl Drawable for Score {
-    fn draw(&self, frame: Frame, facade: &dyn Facade, program: &Program, state: &GameState) -> Frame {
+    fn draw(&self, mut frame: Frame, facade: &dyn Facade, program: &Program, state: &GameState) -> Frame {
         let digits = self.score.to_string().chars().map(|char|{
             char.to_digit(10).unwrap().try_into().unwrap()
         }).collect::<Vec<u16>>();
@@ -54,7 +54,7 @@ impl Drawable for Score {
         frame
     }
 
-    fn update(&mut self, dt: Duration) {
+    fn update(&mut self, dt: std::time::Duration, state: &mut GameState) {
         todo!()
     }
 }

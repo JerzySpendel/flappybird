@@ -4,6 +4,7 @@ use glium::backend::Facade;
 use glium::{Frame, Program};
 use crate::{Drawable, Texture};
 
+#[derive(PartialEq)]
 pub enum GameState {
     Rolling,
     Message,

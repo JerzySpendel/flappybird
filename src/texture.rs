@@ -147,7 +147,7 @@ impl Drawable for Texture {
         frame
     }
 
-    fn update(&mut self, dt: Duration) {}
+    fn update(&mut self, dt: std::time::Duration, state: &mut GameState) {}
 }
 
 pub fn load_texture(

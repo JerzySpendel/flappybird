@@ -72,7 +72,11 @@ impl Drawable for Bird {
         frame
     }
 
-    fn update(&mut self, dt: Duration) {
+    fn update(&mut self, dt: std::time::Duration, state: &mut GameState) {
+        if GameState::Rolling != *state {
+            return
+        }
+
         match self.last_update {
             Some(update_time) => {
                 let now = std::time::Instant::now();

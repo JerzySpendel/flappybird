@@ -38,7 +38,7 @@ fn main() {
         None,
     )
     .unwrap();
-    let mut state = GameState::Rolling;
+    let mut state = GameState::Message;
     let mut game_over_layer = GameOverLayer::new(&display);
     let mut message_layer = message::Message::new(&display);
 
@@ -79,12 +79,12 @@ fn main() {
         let mut dt = (now - last_time);
         last_time = now;
 
-        match state {
-            GameState::Over => {
-                dt = Duration::from_secs(0); // Stop the time if the game has ended
-            }
-            _ => {}
-        }
+        // match state {
+        //     GameState::Over | GameState::Message => {
+        //         dt = Duration::from_secs(0); // Stop the time if the game has ended
+        //     }
+        //     _ => {}
+        // }
 
         let mut layers: &mut [&mut dyn Drawable] = &mut [
             &mut background,
@@ -92,6 +92,7 @@ fn main() {
             &mut base,
             &mut bird,
             &mut game_over_layer,
+            &mut message_layer,
         ];
 
         let mut frame = display.draw();
@@ -100,7 +101,7 @@ fn main() {
 
         for layer in layers.iter_mut() {
             frame = layer.draw(frame,&display, &program, &state);
-            layer.update(dt);
+            layer.update(dt, &mut state);
         }
 
         frame.finish().unwrap();

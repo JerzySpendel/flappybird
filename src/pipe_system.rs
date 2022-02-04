@@ -61,7 +61,7 @@ impl Drawable for Pipe {
         frame
     }
 
-    fn update(&mut self, dt: Duration) {
+    fn update(&mut self, dt: std::time::Duration, state: &mut GameState) {
         todo!()
     }
 }
@@ -183,7 +183,11 @@ impl Drawable for PipeSystem {
         frame
     }
 
-    fn update(&mut self, dt: Duration) {
+    fn update(&mut self, dt: std::time::Duration, state: &mut GameState) {
+        if GameState::Rolling != *state {
+            return
+        }
+
         for pipe in &mut self.pipes {
             pipe.gap_x -= dt.as_secs_f32() / 2.;
         }

@@ -1,3 +1,4 @@
+use std::time::Duration;
 use glium::backend::Facade;
 use glium::{Frame, Program};
 use crate::GameState;
@@ -12,5 +13,5 @@ pub trait Drawable {
         state: &GameState,
     ) -> Frame;
 
-    fn update(&mut self, dt: std::time::Duration);
+    fn update(&mut self, dt: std::time::Duration, state: &mut GameState);
 }
