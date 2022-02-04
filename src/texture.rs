@@ -1,16 +1,16 @@
-use core::convert::AsRef;
-use core::time::Duration;
-use std::ops::{Deref, DerefMut};
-use glium::backend::Facade;
-use glium::draw_parameters::DrawParameters;
-use glium::{Frame, Program, Surface};
-use glium::texture::MipmapsOption;
-use glium::uniforms::{MagnifySamplerFilter, MinifySamplerFilter};
-use crate::GameState;
 use crate::traits::Drawable;
 use crate::transformations::Transformation;
 use crate::utils::Rect;
 use crate::vertex::{Point, UVPoint};
+use crate::GameState;
+use core::convert::AsRef;
+use core::time::Duration;
+use glium::backend::Facade;
+use glium::draw_parameters::DrawParameters;
+use glium::texture::MipmapsOption;
+use glium::uniforms::{MagnifySamplerFilter, MinifySamplerFilter};
+use glium::{Frame, Program, Surface};
+use std::ops::{Deref, DerefMut};
 
 #[derive(Debug)]
 pub struct Texture {
@@ -20,7 +20,6 @@ pub struct Texture {
     pos: (f32, f32),
     transformation: Transformation,
 }
-
 
 impl AsRef<glium::texture::SrgbTexture2d> for Texture {
     fn as_ref(&self) -> &glium::texture::SrgbTexture2d {
@@ -81,19 +80,15 @@ impl Texture {
 
     pub fn set_pos(&mut self, pos: (f32, f32)) {
         self.pos = pos;
-        self.transformation.translation = Some([
-            pos.0 + self.width / 2.,
-            pos.1 - self.get_height() / 2.,
-        ]);
+        self.transformation.translation =
+            Some([pos.0 + self.width / 2., pos.1 - self.get_height() / 2.]);
     }
 
     pub fn set_pos_center(&mut self, pos: (f32, f32)) {
         let height = self.get_height();
         let width = self.get_width();
 
-        self.set_pos(
-            (pos.0 - width / 2., pos.1 + height / 2.)
-        )
+        self.set_pos((pos.0 - width / 2., pos.1 + height / 2.))
     }
 
     pub fn get_height(&self) -> f32 {
@@ -103,7 +98,7 @@ impl Texture {
     pub fn get_rect(&self) -> Rect {
         Rect {
             tl: self.pos,
-            br: (self.pos.0 + self.width, self.pos.1 - self.get_height())
+            br: (self.pos.0 + self.width, self.pos.1 - self.get_height()),
         }
     }
 
@@ -113,8 +108,13 @@ impl Texture {
 }
 
 impl Drawable for Texture {
-    fn draw(&self, mut frame: Frame, facade: &dyn Facade, program: &Program, state: &GameState) -> Frame {
-
+    fn draw(
+        &self,
+        mut frame: Frame,
+        facade: &dyn Facade,
+        program: &Program,
+        state: &GameState,
+    ) -> Frame {
         let vertices_buffer = Point::standard_rectangle_buffer(facade);
         let uvs_buffer = UVPoint::standard_rectangle_buffer(facade);
         let indices = glium::index::IndexBuffer::new(

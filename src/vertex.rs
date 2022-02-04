@@ -13,7 +13,9 @@ pub struct UVPoint {
 
 impl Point {
     pub fn new(x: f32, y: f32) -> Point {
-        Point { position: [x, y, 1.] }
+        Point {
+            position: [x, y, 1.],
+        }
     }
     pub fn standard_rectangle() -> [Point; 4] {
         [

@@ -1,5 +1,3 @@
-use std::ops::{Deref, DerefMut};
-use std::time::Duration;
 use crate::transformations::Transformation;
 use crate::vertex::{Point, UVPoint};
 use crate::Drawable;
@@ -10,6 +8,8 @@ use glium::uniforms::{MagnifySamplerFilter, MinifySamplerFilter};
 use glium::{DrawParameters, Frame, Program, Surface};
 use image;
 use nalgebra::Matrix3;
+use std::ops::{Deref, DerefMut};
+use std::time::Duration;
 
 pub struct Rect {
     pub tl: (f32, f32),
@@ -19,10 +19,10 @@ pub struct Rect {
 impl Rect {
     pub fn collides(&self, other: &Rect) -> bool {
         if self.tl.0 >= other.br.0 || other.tl.0 >= self.br.0 {
-            return false
+            return false;
         }
         if self.br.1 >= other.tl.1 || other.br.1 >= self.tl.1 {
-            return false
+            return false;
         }
 
         true
@@ -45,13 +45,13 @@ impl Rect {
 }
 
 pub struct PositionConsumer {
-    positions: Vec<f32>
+    positions: Vec<f32>,
 }
 
 impl PositionConsumer {
     pub fn new() -> PositionConsumer {
         PositionConsumer {
-            positions: Vec::with_capacity(8)
+            positions: Vec::with_capacity(8),
         }
     }
 
@@ -70,10 +70,10 @@ impl PositionConsumer {
         let recent_dx = values[2] - values[1];
 
         if last_dx < 0f32 && recent_dx > 0f32 {
-            return true
+            return true;
         }
 
-        return false
+        return false;
     }
 }
 
@@ -112,7 +112,6 @@ mod tests {
     }
 }
 
-
 #[cfg(test)]
 mod position_consumer_test {
     use crate::utils::PositionConsumer;
@@ -124,6 +123,5 @@ mod position_consumer_test {
         assert_eq!(pc.feed(2f32), false);
         assert_eq!(pc.feed(1f32), false);
         assert_eq!(pc.feed(1f32), false);
-
     }
 }

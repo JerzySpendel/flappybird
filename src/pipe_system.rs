@@ -1,15 +1,15 @@
-use crate::{Drawable, GameState};
+use crate::bird::Bird;
+use crate::score::Score;
 use crate::texture::Texture;
-use rand::prelude::*;
+use crate::utils::{PositionConsumer, Rect};
+use crate::{Drawable, GameState};
 use glium::backend::Facade;
 use glium::{Frame, Program};
+use nalgebra::min;
+use rand::prelude::*;
 use std::cell::RefCell;
 use std::rc::Rc;
 use std::time::Duration;
-use nalgebra::min;
-use crate::bird::Bird;
-use crate::score::Score;
-use crate::utils::{PositionConsumer, Rect};
 
 static INIT_POSITION: f32 = 1.5;
 
@@ -31,7 +31,7 @@ impl Pipe {
     }
 
     pub fn get_rects(&self) -> [Rect; 2] {
-        let mut texture= self.texture.borrow_mut();;
+        let mut texture = self.texture.borrow_mut();
         let texture_height = texture.get_height();
         let texture_width = texture.get_width();
         [
@@ -41,14 +41,23 @@ impl Pipe {
             },
             Rect {
                 tl: (self.gap_x, self.gap_y - self.gap / 2f32),
-                br: (self.gap_x + texture_width, self.gap_y - self.gap / 2f32 - texture_height),
-            }
+                br: (
+                    self.gap_x + texture_width,
+                    self.gap_y - self.gap / 2f32 - texture_height,
+                ),
+            },
         ]
     }
 }
 
 impl Drawable for Pipe {
-    fn draw(&self, mut frame: Frame, facade: &dyn Facade, program: &Program, state: &GameState) -> Frame {
+    fn draw(
+        &self,
+        mut frame: Frame,
+        facade: &dyn Facade,
+        program: &Program,
+        state: &GameState,
+    ) -> Frame {
         let mut texture = self.texture.borrow_mut();
         let texture_height = texture.get_height();
         texture.rotation = Some(std::f32::consts::PI);
@@ -126,17 +135,17 @@ impl PipeSystem {
             }
         }
 
-        self.pipes.push(
-            Pipe::new(&self.texture, 0.5, rand::thread_rng().gen::<f32>() / 4., INIT_POSITION)
-        );
-
+        self.pipes.push(Pipe::new(
+            &self.texture,
+            0.5,
+            rand::thread_rng().gen::<f32>() / 4.,
+            INIT_POSITION,
+        ));
     }
 
     fn should_add_pipe(&self) -> bool {
         match self.last_pipe() {
-            Some(pipe) => {
-                (pipe.gap_x - INIT_POSITION).abs() > self.distance
-            }
+            Some(pipe) => (pipe.gap_x - INIT_POSITION).abs() > self.distance,
             None => true,
         }
     }
@@ -144,9 +153,11 @@ impl PipeSystem {
     pub fn check_points(&mut self, bird: &Bird) {
         let bird_rect = bird.get_rect();
         let middle_x = (bird_rect.tl.0 + bird_rect.br.0) / 2.;
-        let min_dist = self.pipes.iter().map(|pipe| (pipe.gap_x - middle_x).abs()).min_by(
-            |x, y| x.partial_cmp(y).unwrap()
-        );
+        let min_dist = self
+            .pipes
+            .iter()
+            .map(|pipe| (pipe.gap_x - middle_x).abs())
+            .min_by(|x, y| x.partial_cmp(y).unwrap());
 
         match min_dist {
             Some(dist) => {
@@ -154,27 +165,30 @@ impl PipeSystem {
                     self.score_system.increment();
                 }
             }
-            None => ()
+            None => (),
         }
-
     }
 
     pub fn check_collision(&self, bird: &Rect) -> bool {
         for pipe in &self.pipes {
             for rect in pipe.get_rects() {
                 if rect.collides(bird) {
-                    return true
+                    return true;
                 }
             }
         }
-
         false
-
     }
 }
 
 impl Drawable for PipeSystem {
-    fn draw(&self, mut frame: Frame, facade: &dyn Facade, program: &Program, state: &GameState) -> Frame {
+    fn draw(
+        &self,
+        mut frame: Frame,
+        facade: &dyn Facade,
+        program: &Program,
+        state: &GameState,
+    ) -> Frame {
         for pipe in &self.pipes {
             frame = pipe.draw(frame, facade, program, state);
         }
@@ -185,7 +199,7 @@ impl Drawable for PipeSystem {
 
     fn update(&mut self, dt: std::time::Duration, state: &mut GameState) {
         if GameState::Rolling != *state {
-            return
+            return;
         }
 
         for pipe in &mut self.pipes {

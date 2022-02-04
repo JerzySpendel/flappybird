@@ -1,28 +1,28 @@
 mod background;
 mod bird;
+mod message;
+mod over;
 mod pipe_system;
+mod score;
+mod state;
+mod texture;
 mod traits;
+mod transformations;
 mod uniforms;
 mod utils;
 mod vertex;
-mod transformations;
-mod texture;
-mod score;
-mod state;
-mod message;
-mod over;
 
-use std::time::Duration;
-use crate::pipe_system::PipeSystem;
-use crate::traits::Drawable;
-use glium;
-use glium::{Display, Frame, glutin, Program};
-use glium::Surface;
-use over::GameOverLayer;
 use crate::message::Message;
+use crate::pipe_system::PipeSystem;
 use crate::state::GameState;
 use crate::texture::Texture;
+use crate::traits::Drawable;
 use crate::utils::Rect;
+use glium;
+use glium::Surface;
+use glium::{glutin, Display, Frame, Program};
+use over::GameOverLayer;
+use std::time::Duration;
 
 fn main() {
     let mut events_loop = glium::glutin::event_loop::EventLoop::new();
@@ -91,9 +91,8 @@ fn main() {
         let mut frame = display.draw();
         frame.clear_color(1., 0., 0., 1.);
 
-
         for layer in layers.iter_mut() {
-            frame = layer.draw(frame,&display, &program, &state);
+            frame = layer.draw(frame, &display, &program, &state);
             layer.update(dt, &mut state);
         }
 
@@ -114,5 +113,4 @@ fn main() {
             std::time::Instant::now() + std::time::Duration::from_millis(20),
         );
     });
-
 }

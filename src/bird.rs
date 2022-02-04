@@ -1,13 +1,13 @@
-use std::cell::{RefCell, RefMut};
-use std::time::Duration;
+use crate::pipe_system::Pipe;
+use crate::texture::Texture;
 use crate::traits::Drawable;
+use crate::utils::Rect;
+use crate::GameState;
 use glium::backend::Facade;
 use glium::{uniform, BlendingFunction, DrawParameters, Frame, Program, Surface};
 use nalgebra::{Matrix, Matrix2, OMatrix, Rotation2};
-use crate::GameState;
-use crate::texture::Texture;
-use crate::pipe_system::Pipe;
-use crate::utils::Rect;
+use std::cell::{RefCell, RefMut};
+use std::time::Duration;
 
 pub struct Bird {
     textures: [RefCell<Texture>; 3],
@@ -21,9 +21,24 @@ impl Bird {
     pub fn new(display: &dyn glium::backend::Facade) -> Bird {
         Bird {
             textures: [
-                RefCell::new(Texture::new("./assets/sprites/bluebird-downflap.png", display, (0., 0.), Some(0.2))),
-                RefCell::new(Texture::new("./assets/sprites/bluebird-midflap.png", display, (0., 0.), Some(0.2))),
-                RefCell::new(Texture::new("./assets/sprites/bluebird-upflap.png", display, (0., 0.), Some(0.2))),
+                RefCell::new(Texture::new(
+                    "./assets/sprites/bluebird-downflap.png",
+                    display,
+                    (0., 0.),
+                    Some(0.2),
+                )),
+                RefCell::new(Texture::new(
+                    "./assets/sprites/bluebird-midflap.png",
+                    display,
+                    (0., 0.),
+                    Some(0.2),
+                )),
+                RefCell::new(Texture::new(
+                    "./assets/sprites/bluebird-upflap.png",
+                    display,
+                    (0., 0.),
+                    Some(0.2),
+                )),
             ],
             start_time: std::time::Instant::now(),
             last_update: None,
@@ -54,7 +69,6 @@ impl Bird {
     pub fn get_rect(&self) -> Rect {
         self.current_texture().get_rect()
     }
-
 }
 
 impl Drawable for Bird {
@@ -74,7 +88,7 @@ impl Drawable for Bird {
 
     fn update(&mut self, dt: std::time::Duration, state: &mut GameState) {
         if GameState::Rolling != *state {
-            return
+            return;
         }
 
         match self.last_update {
@@ -90,6 +104,5 @@ impl Drawable for Bird {
                 self.last_update = Some(std::time::Instant::now());
             }
         }
-
     }
 }

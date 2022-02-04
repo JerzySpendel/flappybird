@@ -1,8 +1,8 @@
-use std::time::Duration;
+use crate::utils::Rect;
+use crate::GameState;
 use glium::backend::Facade;
 use glium::{Frame, Program};
-use crate::GameState;
-use crate::utils::Rect;
+use std::time::Duration;
 
 pub trait Drawable {
     fn draw(

@@ -16,22 +16,14 @@ impl Transformation {
         }
     }
 
-    // fn get_translation(&self) -> [f32; 2] {
-    //     match self.translation {
-    //         None => []
-    //     }
-    // }
-
     pub fn get_matrix(&self) -> Matrix3<f32> {
         let mut matrix = Matrix3::<f32>::identity();
         match self.scale {
-            Some(scale) => {
-                unsafe {
-                    *matrix.get_unchecked_mut(0) *= scale.0;
-                    *matrix.get_unchecked_mut(4) *= scale.1;
-                }
-            }
-            None => ()
+            Some(scale) => unsafe {
+                *matrix.get_unchecked_mut(0) *= scale.0;
+                *matrix.get_unchecked_mut(4) *= scale.1;
+            },
+            None => (),
         }
 
         match self.rotation {
@@ -43,7 +35,10 @@ impl Transformation {
 
         match self.translation {
             Some(translation) => {
-                matrix = Matrix3::<f32>::new_translation(&Vector2::<f32>::new(translation[0], translation[1])) * matrix;
+                matrix = Matrix3::<f32>::new_translation(&Vector2::<f32>::new(
+                    translation[0],
+                    translation[1],
+                )) * matrix;
             }
             None => {}
         }

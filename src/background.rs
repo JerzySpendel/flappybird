@@ -1,8 +1,8 @@
-use std::cell::RefCell;
+use crate::{Drawable, GameState, Texture};
 use glium::backend::Facade;
 use glium::{Frame, Program};
+use std::cell::RefCell;
 use std::time::Duration;
-use crate::{Drawable, GameState, Texture};
 
 pub struct Background {
     block_width: f32,
@@ -21,7 +21,12 @@ impl Background {
     ) -> Background {
         Background {
             block_width,
-            texture: RefCell::new(Texture::new(sprite_path, display, (0., 0.), Some(block_width))),
+            texture: RefCell::new(Texture::new(
+                sprite_path,
+                display,
+                (0., 0.),
+                Some(block_width),
+            )),
             start_time: std::time::Instant::now(),
             speed,
             offset: 0f32,
@@ -44,14 +49,14 @@ impl Drawable for Background {
 
         let mut texture = self.texture.borrow_mut();
         for i in 0..blocks_number {
-            let current_offset = -1. + self.block_width * (i as f32) + (self.offset % self.block_width);
+            let current_offset =
+                -1. + self.block_width * (i as f32) + (self.offset % self.block_width);
 
             texture.set_pos((current_offset, -1. + height));
             frame = texture.draw(frame, facade, program, state);
         }
 
         frame
-
     }
 
     fn update(&mut self, dt: std::time::Duration, state: &mut GameState) {
