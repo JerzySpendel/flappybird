@@ -4,7 +4,7 @@ use nalgebra::{Matrix, Matrix3, Vector2};
 pub struct Transformation {
     pub scale: Option<(f32, f32)>,
     pub rotation: Option<f32>,
-    pub translation: Option<[f32; 2]>,
+    pub translation: Option<(f32, f32)>,
 }
 
 impl Transformation {
@@ -36,8 +36,8 @@ impl Transformation {
         match self.translation {
             Some(translation) => {
                 matrix = Matrix3::<f32>::new_translation(&Vector2::<f32>::new(
-                    translation[0],
-                    translation[1],
+                    translation.0,
+                    translation.1,
                 )) * matrix;
             }
             None => {}

@@ -81,7 +81,7 @@ impl Texture {
     pub fn set_pos(&mut self, pos: (f32, f32)) {
         self.pos = pos;
         self.transformation.translation =
-            Some([pos.0 + self.width / 2., pos.1 - self.get_height() / 2.]);
+            Some((pos.0 + self.width / 2., pos.1 - self.get_height() / 2.));
     }
 
     pub fn set_pos_center(&mut self, pos: (f32, f32)) {
