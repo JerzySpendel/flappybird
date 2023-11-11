@@ -61,16 +61,13 @@ fn main() {
                 _ => (),
             },
             glutin::event::Event::DeviceEvent { event, .. } => match event {
-                glutin::event::DeviceEvent::Key(input) => match input.virtual_keycode {
-                    Some(keycode) => match keycode {
-                        glutin::event::VirtualKeyCode::Space => {
-                            bird.space_hit();
-                        }
-                        _ => {}
+                glutin::event::DeviceEvent::Button{button, state} => match state {
+                    glutin::event::ElementState::Pressed => {
+                        bird.space_hit();
                     },
-                    None => {}
+                    _ => (),
                 },
-                _ => {}
+                _ => (),
             },
             _ => (),
         }
